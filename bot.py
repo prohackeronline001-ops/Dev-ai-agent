@@ -14,7 +14,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 # --- SECRETS AND CONFIGURATION (loaded from environment, never hardcoded) ---
 TELEGRAM_BOT_TOKEN = "8846805014:AAF2aeOCZ2hwHrrMTyP9CaTYctQpcjdH9Ew"
-HF_API_TOKEN = "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"
+HF_API_TOKEN = "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"
 if not TELEGRAM_BOT_TOKEN:
     raise RuntimeError("TELEGRAM_BOT_TOKEN environment variable is not set.")
 if not HF_API_TOKEN:
