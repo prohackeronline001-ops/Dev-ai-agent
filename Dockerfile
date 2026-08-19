@@ -1,4 +1,4 @@
-# Python 3.11 ব্যবহার করুন (Python 3.14 নয়)
+# Python 3.11 ব্যবহার করুন
 FROM python:3.11-slim
 
 # Working directory তৈরি করুন
@@ -8,7 +8,7 @@ WORKDIR /app
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# System dependencies ইনস্টল করুন (ঐচ্ছিক)
+# System dependencies ইনস্টল করুন
 RUN apt-get update && apt-get install -y \
     gcc \
     && rm -rf /var/lib/apt/lists/*
