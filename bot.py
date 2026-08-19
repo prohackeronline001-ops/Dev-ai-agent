@@ -13,9 +13,8 @@ from telegram.constants import ParseMode
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
 
 # --- SECRETS AND CONFIGURATION (loaded from environment, never hardcoded) ---
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
-HF_API_TOKEN = os.environ.get("HF_API_TOKEN")
-
+TELEGRAM_BOT_TOKEN = "8846805014:AAF_-ClIVSXbV1MRt5sXjqjdh4DtNkOj0lk"
+HF_API_TOKEN = "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"
 if not TELEGRAM_BOT_TOKEN:
     raise RuntimeError("TELEGRAM_BOT_TOKEN environment variable is not set.")
 if not HF_API_TOKEN:
