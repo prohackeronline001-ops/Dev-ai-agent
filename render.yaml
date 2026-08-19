@@ -1,5 +1,5 @@
 services:
-  - type: worker
+  - type: worker  # ✅ Web Service না, Worker ব্যবহার করুন
     name: jarvis-bot
     runtime: docker
     repo: https://github.com/yourusername/your-repo
