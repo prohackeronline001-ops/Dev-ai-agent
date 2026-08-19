@@ -3,3 +3,5 @@ requests==2.31.0
 flask==2.3.2
 psutil==5.9.5
 python-dotenv==1.0.0
+httpx==0.23.3
+httpcore==0.16.3
