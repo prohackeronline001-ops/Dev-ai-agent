@@ -1,3 +1,5 @@
+import asyncio
+import sys
 import logging
 import requests
 import subprocess
@@ -33,14 +35,13 @@ def detect_language(text: str) -> str:
     hindi_count = sum(1 for char in text if char in hindi_chars)
     
     if bengali_count > hindi_count:
-        return "bn"  # Bengali
+        return "bn"
     elif hindi_count > 0:
-        return "hi"  # Hindi
+        return "hi"
     else:
-        return "en"  # English
+        return "en"
 
 def get_system_prompt(lang: str) -> str:
-    """Get system prompt based on language"""
     if lang == "bn":
         return 'You are JARVIS. Always start your response with a simple smiling emoji (like 😊), followed by a space. Always respond in Bengali using feminine grammar. Your answers must be concise (1-2 sentences).'
     elif lang == "hi":
@@ -87,7 +88,6 @@ def query_jarvis_ai(prompt: str) -> str:
 
 
 def query_vision_model(image_bytes: bytes, caption: str) -> str:
-    """Uses a stable image recognition model (ViT Base) with retries."""
     lang = detect_language(caption)
     headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
 
@@ -191,9 +191,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def handle_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user_text = update.message.text
     
-    # ✅ Reaction সরানো হয়েছে (কারণ পুরনো ভার্সনে নেই)
-    # ইচ্ছে করলে এখানে অন্য কিছু করতে পারেন
-    
     local_response = handle_local_commands(user_text)
     if local_response:
         await update.message.reply_text(local_response, parse_mode=ParseMode.MARKDOWN)
@@ -231,12 +228,32 @@ async def handle_image_message(update: Update, context: ContextTypes.DEFAULT_TYP
 
 
 def main() -> None:
+    # ✅ Webhook ক্লিয়ার করুন
+    try:
+        response = requests.get(
+            f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/deleteWebhook"
+        )
+        if response.status_code == 200:
+            logger.info("✅ Webhook cleared successfully")
+    except Exception as e:
+        logger.warning(f"Could not clear webhook: {e}")
+    
+    # ✅ Build application
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
     application.add_handler(CommandHandler("start", start))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_message))
     application.add_handler(MessageHandler(filters.PHOTO, handle_image_message))
+    
     print("JARVIS AI Bot (Bengali/Hindi/English Support) is running... Press Ctrl-C to stop.")
-    application.run_polling()
+    
+    # ✅ Polling with error handling
+    try:
+        application.run_polling()
+    except Exception as e:
+        logger.error(f"Polling error: {e}")
+        time.sleep(5)
+        # Re-run if needed
+        main()
 
 
 if __name__ == "__main__":
